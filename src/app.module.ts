@@ -19,9 +19,19 @@ import { CreatePaymentUseCase } from './application/payments/use-cases/create-pa
 import { DeletePaymentUseCase } from './application/payments/use-cases/delete-payment.use-case';
 import { GetPaymentByIdUseCase } from './application/payments/use-cases/get-payment-by-id.use-case';
 import { UpdatePaymentUseCase } from './application/payments/use-cases/update-payment.use-case';
-import { GetAllPaymentsUseCase } from './application/payments/use-cases/getAllPaymentsUseCase'; // Asegúrate de que esté importado
+import { GetAllPaymentsUseCase } from './application/payments/use-cases/getAllPaymentsUseCase';
 import { MongoDBPaymentAdapter } from './infrastructure/payments/adapters/mongodb-payment.adapter';
 import { PaymentSchema } from './infrastructure/payments/adapters/payment.schema';
+
+// Notification Imports
+import { NotificationController } from './infrastructure/notifications/controllers/notification.controller';
+import { CreateNotificationUseCase } from './application/notifications/use-cases/create-notification.use-case';
+import { DeleteNotificationUseCase } from './application/notifications/use-cases/delete-notification.use-case';
+import { GetNotificationByIdUseCase } from './application/notifications/use-cases/get-notification-by-id.use-case';
+import { UpdateNotificationUseCase } from './application/notifications/use-cases/update-notification.use-case';
+import { GetAllNotificationsUseCase } from './application/notifications/use-cases/get-all-notifications.use-case';
+import { MongoDBNotificationAdapter } from './infrastructure/notifications/adapters/mongodb-notification.adapter';
+import { NotificationSchema } from './infrastructure/notifications/adapters/notification.schema';
 
 @Module({
   imports: [
@@ -31,12 +41,14 @@ import { PaymentSchema } from './infrastructure/payments/adapters/payment.schema
     // Register schemas for Mongoose
     MongooseModule.forFeature([
       { name: 'Product', schema: ProductSchema },
-      { name: 'Payment', schema: PaymentSchema }
+      { name: 'Payment', schema: PaymentSchema },
+      { name: 'Notification', schema: NotificationSchema } // Añadir esquema de Notification
     ]),
   ],
   controllers: [
     ProductController,
-    PaymentController,  // Registro del controlador de Payment
+    PaymentController,
+    NotificationController, // Registro del controlador de Notification
   ],
   providers: [
     // Product Use Cases and Adapter
@@ -55,10 +67,21 @@ import { PaymentSchema } from './infrastructure/payments/adapters/payment.schema
     DeletePaymentUseCase,
     GetPaymentByIdUseCase,
     UpdatePaymentUseCase,
-    GetAllPaymentsUseCase, // Añadir aquí
+    GetAllPaymentsUseCase,
     {
       provide: 'PaymentServicePort',
       useClass: MongoDBPaymentAdapter,
+    },
+    
+    // Notification Use Cases and Adapter
+    CreateNotificationUseCase,
+    DeleteNotificationUseCase,
+    GetNotificationByIdUseCase,
+    UpdateNotificationUseCase,
+    GetAllNotificationsUseCase,
+    {
+      provide: 'NotificationServicePort',
+      useClass: MongoDBNotificationAdapter, // Usando el adaptador de Notification
     },
   ],
 })
