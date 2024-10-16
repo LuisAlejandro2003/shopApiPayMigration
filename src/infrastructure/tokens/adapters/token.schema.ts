@@ -1,17 +1,13 @@
-// src/infrastructure/tokens/adapters/token.schema.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
 @Schema()
-export class TokenDocument extends Document {
-  @Prop({ required: true })
-  value: string;
-
-  @Prop({ required: true })
-  type: string;
-
+export class Token extends Document {
   @Prop({ required: true })
   userId: string;
+
+  @Prop({ required: true })
+  value: string;
 
   @Prop({ required: true })
   createdAt: Date;
@@ -20,4 +16,4 @@ export class TokenDocument extends Document {
   validAt: Date;
 }
 
-export const TokenSchema = SchemaFactory.createForClass(TokenDocument);
+export const TokenSchema = SchemaFactory.createForClass(Token);

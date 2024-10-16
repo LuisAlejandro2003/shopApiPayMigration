@@ -10,15 +10,17 @@ export class GenerateTokenUseCase {
     @Inject('NotificationServicePort') private readonly notificationService: NotificationServicePort,
   ) {}
 
-  async execute(userId: string, phoneNumber: string): Promise<void> {
-    const token = await this.tokenService.generateToken(userId, phoneNumber);
-
-    const message = `Tu token de verificación es: ${token}`;
+async execute(userId: string, phoneNumber: string): Promise<void> {
+    const tokenValue = await this.tokenService.generateToken(userId, phoneNumber);
+    const message = `Tu token de verificación es: ${tokenValue}`;
+    console.log(`Enviando mensaje a WhatsApp: ${phoneNumber}, con contenido: ${message}`);
     await this.notificationService.create({
       id: '',
       phoneNumber,
       message,
       status: 'Pending',
     });
-  }
+}
+
+
 }

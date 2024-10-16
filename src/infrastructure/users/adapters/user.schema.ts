@@ -1,9 +1,11 @@
-// src/infrastructure/users/adapters/user.schema.ts
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
 @Schema()
-export class UserDocument extends Document {
+export class User extends Document {
+  @Prop({ required: true })
+  email: string;
+
   @Prop({ required: true })
   password: string;
 
@@ -11,7 +13,7 @@ export class UserDocument extends Document {
   contactId: string;
 
   @Prop()
-  verifiedAt?: Date;
+  verifiedAt: Date | null;
 }
 
-export const UserSchema = SchemaFactory.createForClass(UserDocument);
+export const UserSchema = SchemaFactory.createForClass(User);
