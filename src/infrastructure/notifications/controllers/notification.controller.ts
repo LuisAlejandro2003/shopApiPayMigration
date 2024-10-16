@@ -47,5 +47,5 @@ export class NotificationController {
   @Delete(':id')
   async delete(@Param('id') id: string) {
     await this.deleteNotificationUseCase.execute(id);
-  }
+  }  
 }

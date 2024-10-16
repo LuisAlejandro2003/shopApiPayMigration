@@ -1,4 +1,3 @@
-// src/app.module.ts
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -33,25 +32,35 @@ import { GetAllNotificationsUseCase } from './application/notifications/use-case
 import { MongoDBNotificationAdapter } from './infrastructure/notifications/adapters/mongodb-notification.adapter';
 import { NotificationSchema } from './infrastructure/notifications/adapters/notification.schema';
 
+// Contact Imports
+import { ContactController } from './infrastructure/contacts/controllers/contact.controller';
+import { CreateContactUseCase } from './application/contacts/use-cases/create-contact.use-case';
+import { DeleteContactUseCase } from './application/contacts/use-cases/delete-contact.use-case';
+import { GetContactByIdUseCase } from './application/contacts/use-cases/get-contact-by-id.use-case';
+import { UpdateContactUseCase } from './application/contacts/use-cases/update-contact.use-case';
+import { GetAllContactsUseCase } from './application/contacts/use-cases/get-all-contacts.use-case';
+import { MongoDBContactAdapter } from './infrastructure/contacts/adapters/mongodb-contact.adapter';
+import { ContactSchema } from './infrastructure/contacts/adapters/contact.schema';
+
 @Module({
   imports: [
     ConfigModule.forRoot(),
     MongooseModule.forRoot(process.env.MONGODB_URI),
-    
-    // Register schemas for Mongoose
     MongooseModule.forFeature([
       { name: 'Product', schema: ProductSchema },
       { name: 'Payment', schema: PaymentSchema },
-      { name: 'Notification', schema: NotificationSchema } // Añadir esquema de Notification
+      { name: 'Notification', schema: NotificationSchema },
+      { name: 'Contact', schema: ContactSchema }, // Se añade el esquema de Contact
     ]),
   ],
   controllers: [
     ProductController,
     PaymentController,
-    NotificationController, // Registro del controlador de Notification
+    NotificationController,
+    ContactController, // Se añade el controlador de Contact
   ],
   providers: [
-    // Product Use Cases and Adapter
+    // Product Providers
     CreateProductUseCase,
     DeleteProductUseCase,
     GetProductByIdUseCase,
@@ -61,8 +70,8 @@ import { NotificationSchema } from './infrastructure/notifications/adapters/noti
       provide: 'ProductServicePort',
       useClass: MongoDBProductAdapter,
     },
-    
-    // Payment Use Cases and Adapter
+
+    // Payment Providers
     CreatePaymentUseCase,
     DeletePaymentUseCase,
     GetPaymentByIdUseCase,
@@ -72,8 +81,8 @@ import { NotificationSchema } from './infrastructure/notifications/adapters/noti
       provide: 'PaymentServicePort',
       useClass: MongoDBPaymentAdapter,
     },
-    
-    // Notification Use Cases and Adapter
+
+    // Notification Providers
     CreateNotificationUseCase,
     DeleteNotificationUseCase,
     GetNotificationByIdUseCase,
@@ -81,7 +90,18 @@ import { NotificationSchema } from './infrastructure/notifications/adapters/noti
     GetAllNotificationsUseCase,
     {
       provide: 'NotificationServicePort',
-      useClass: MongoDBNotificationAdapter, // Usando el adaptador de Notification
+      useClass: MongoDBNotificationAdapter,
+    },
+
+    // Contact Providers
+    CreateContactUseCase,
+    DeleteContactUseCase,
+    GetContactByIdUseCase,
+    UpdateContactUseCase,
+    GetAllContactsUseCase,
+    {
+      provide: 'ContactServicePort',
+      useClass: MongoDBContactAdapter, // Adaptador de Contact
     },
   ],
 })
