@@ -42,6 +42,19 @@ import { GetAllContactsUseCase } from './application/contacts/use-cases/get-all-
 import { MongoDBContactAdapter } from './infrastructure/contacts/adapters/mongodb-contact.adapter';
 import { ContactSchema } from './infrastructure/contacts/adapters/contact.schema';
 
+// User Imports
+import { UserController } from './infrastructure/users/controllers/user.controller';
+import { CreateUserUseCase } from './application/users/use-cases/create-user.use-case';
+import { MongoDBUserAdapter } from './infrastructure/users/adapters/mongodb-user.adapter';
+import { UserSchema } from './infrastructure/users/adapters/user.schema';
+
+// Token Imports
+import { TokenController } from './infrastructure/tokens/controllers/token.controller';
+import { GenerateTokenUseCase } from './application/tokens/use-cases/generate-token.use-case';
+import { ValidateTokenUseCase } from './application/tokens/use-cases/validate-token.use-case';
+import { MongoDBTokenAdapter } from './infrastructure/tokens/adapters/mongodb-token.adapter';
+import { TokenSchema } from './infrastructure/tokens/adapters/token.schema';
+
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -50,14 +63,18 @@ import { ContactSchema } from './infrastructure/contacts/adapters/contact.schema
       { name: 'Product', schema: ProductSchema },
       { name: 'Payment', schema: PaymentSchema },
       { name: 'Notification', schema: NotificationSchema },
-      { name: 'Contact', schema: ContactSchema }, // Se añade el esquema de Contact
+      { name: 'Contact', schema: ContactSchema },
+      { name: 'User', schema: UserSchema }, // Añade el esquema de User
+      { name: 'Token', schema: TokenSchema }, // Añade el esquema de Token
     ]),
   ],
   controllers: [
     ProductController,
     PaymentController,
     NotificationController,
-    ContactController, // Se añade el controlador de Contact
+    ContactController,
+    UserController, // Añade el controlador de User
+    TokenController, // Añade el controlador de Token
   ],
   providers: [
     // Product Providers
@@ -101,7 +118,22 @@ import { ContactSchema } from './infrastructure/contacts/adapters/contact.schema
     GetAllContactsUseCase,
     {
       provide: 'ContactServicePort',
-      useClass: MongoDBContactAdapter, // Adaptador de Contact
+      useClass: MongoDBContactAdapter,
+    },
+
+    // User Providers
+    CreateUserUseCase,
+    {
+      provide: 'UserServicePort',
+      useClass: MongoDBUserAdapter,
+    },
+
+    // Token Providers
+    GenerateTokenUseCase,
+    ValidateTokenUseCase,
+    {
+      provide: 'TokenServicePort',
+      useClass: MongoDBTokenAdapter,
     },
   ],
 })
