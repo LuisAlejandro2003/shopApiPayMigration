@@ -51,6 +51,7 @@ import { UserSchema } from './infrastructure/users/adapters/user.schema';
 // Importaciones de Token
 import { TokenController } from './infrastructure/tokens/controllers/token.controller';
 import { GenerateTokenUseCase } from './application/tokens/use-cases/generate-token.use-case';
+import { ActivateAccountUseCase } from './application/tokens/use-cases/activate-account.use-case';
 import { ValidateTokenUseCase } from './application/tokens/use-cases/validate-token.use-case';
 import { MongoDBTokenAdapter } from './infrastructure/tokens/adapters/mongodb-token.adapter';
 import { TokenSchema } from './infrastructure/tokens/adapters/token.schema';
@@ -119,6 +120,7 @@ import { TokenSchema } from './infrastructure/tokens/adapters/token.schema';
     },
     // Providers de User
     CreateUserUseCase,
+
     {
       provide: 'UserServicePort',
       useClass: MongoDBUserAdapter,
@@ -126,6 +128,7 @@ import { TokenSchema } from './infrastructure/tokens/adapters/token.schema';
     // Providers de Token
     GenerateTokenUseCase,
     ValidateTokenUseCase,
+    ActivateAccountUseCase,
     {
       provide: 'TokenServicePort',
       useClass: MongoDBTokenAdapter,

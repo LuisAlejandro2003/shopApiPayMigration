@@ -11,4 +11,11 @@ export class MongoDBUserAdapter {
     const newUser = new this.userModel(user);
     return await newUser.save();
   }
+
+
+  async activateUserAccount(userId: string): Promise<void> {
+    await this.userModel.findByIdAndUpdate(userId, { verifiedAt: new Date() });
+  }
+
+  
 }
