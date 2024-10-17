@@ -1,3 +1,4 @@
+// generate-token.use-case.ts
 import { Injectable, Inject } from '@nestjs/common';
 import { TokenServicePort } from 'src/domain/tokens/ports/token-service.port';
 import { NotificationServicePort } from 'src/domain/notifications/ports/notification-service.port';
@@ -22,5 +23,4 @@ export class GenerateTokenUseCase {
       status: 'Pending',
     });
   }
-
 }

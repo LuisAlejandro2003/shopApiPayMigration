@@ -7,19 +7,22 @@ import { Token } from 'src/domain/tokens/entities/token.entity';
 export class MongoDBTokenAdapter {
   constructor(@InjectModel(Token.name) private readonly tokenModel: Model<Token>) {}
 
+  private generateFourDigitToken(): string {
+    return Math.floor(1000 + Math.random() * 9000).toString(); // Genera un token de 4 dígitos
+  }
+
   async generateToken(userId: string, phoneNumber: string): Promise<string> {
+    const tokenValue = this.generateFourDigitToken(); // Generar un token de 4 dígitos
     const tokenData = {
       userId,
-      value: 'token_value',
-      phoneNumber,
+      value: tokenValue,
       createdAt: new Date(),
       validAt: new Date(Date.now() + 3600000), // por ejemplo, válido por 1 hora
     };
     const newToken = new this.tokenModel(tokenData);
     await newToken.save();
-    return newToken._id.toString();
+    return tokenValue; // Retornar el valor del token generado
   }
-  
 
   async findByValue(value: string): Promise<Token | null> {
     return await this.tokenModel.findOne({ value });
