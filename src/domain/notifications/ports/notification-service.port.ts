@@ -7,4 +7,5 @@ export interface NotificationServicePort {
   update(id: string, notification: Notification): Promise<Notification>;
   delete(id: string): Promise<void>;
   findAll(queryParams: any): Promise<any>;
+  sendEmail(to: string, subject: string, text: string): Promise<void>; 
 }

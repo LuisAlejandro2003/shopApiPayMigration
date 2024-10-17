@@ -17,5 +17,9 @@ export class MongoDBUserAdapter {
     await this.userModel.findByIdAndUpdate(userId, { verifiedAt: new Date() });
   }
 
-  
+  // src/infrastructure/users/adapters/mongodb-user.adapter.ts
+  async findUserById(userId: string): Promise<User> {
+    return await this.userModel.findById(userId).exec();
+}
+
 }

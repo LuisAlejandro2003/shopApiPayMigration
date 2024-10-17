@@ -5,15 +5,27 @@ import { Model } from 'mongoose';
 import { NotificationServicePort } from 'src/domain/notifications/ports/notification-service.port';
 import { Notification } from 'src/domain/notifications/entities/notification.entity';
 import * as Twilio from 'twilio';
+import * as nodemailer from 'nodemailer';
 
 @Injectable()
 export class MongoDBNotificationAdapter implements NotificationServicePort {
   private client: Twilio.Twilio;
+  private transporter;
 
   constructor(
     @InjectModel('Notification') private readonly notificationModel: Model<any>,
   ) {
     this.client = Twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+
+    this.transporter = nodemailer.createTransport({
+      host: process.env.EMAIL_HOST,
+      port: +process.env.EMAIL_PORT,
+      secure: false, // true para 465, falso para otros puertos
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD,
+      },
+    });
   }
 
   async create(notification: Notification): Promise<Notification> {
@@ -53,6 +65,20 @@ export class MongoDBNotificationAdapter implements NotificationServicePort {
       });
       await failedNotification.save();
       throw new InternalServerErrorException(`WhatsApp notification failed: ${error.message}`);
+    }
+  }
+
+
+  async sendEmail(to: string, subject: string, text: string): Promise<void> {
+    try {
+      await this.transporter.sendMail({
+        from: process.env.GMAIL_USER,
+        to,
+        subject,
+        text,
+      });
+    } catch (error) {
+      throw new InternalServerErrorException(`Email notification failed: ${error.message}`);
     }
   }
 

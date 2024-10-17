@@ -11,4 +11,9 @@ export class MongoDBContactAdapter {
     const newContact = new this.contactModel(contact);
     return await newContact.save();
   }
+
+  async getContactById(contactId: string): Promise<Contact | null> {
+    return await this.contactModel.findById(contactId).exec();
+  }
+  
 }
