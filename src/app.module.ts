@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 
-// Product Imports
+// Importaciones de Product
 import { ProductController } from './infrastructure/products/controllers/product.controller';
 import { CreateProductUseCase } from './application/products/use-cases/create-product.use-case';
 import { DeleteProductUseCase } from './application/products/use-cases/delete-product.use-case';
@@ -12,7 +12,7 @@ import { GetAllProductsUseCase } from './application/products/use-cases/get-all-
 import { MongoDBProductAdapter } from './infrastructure/products/adapters/mongodb-product.adapter';
 import { ProductSchema } from './infrastructure/products/adapters/product.schema';
 
-// Payment Imports
+// Importaciones de Payment
 import { PaymentController } from './infrastructure/payments/controllers/payment.controller';
 import { CreatePaymentUseCase } from './application/payments/use-cases/create-payment.use-case';
 import { DeletePaymentUseCase } from './application/payments/use-cases/delete-payment.use-case';
@@ -22,7 +22,7 @@ import { GetAllPaymentsUseCase } from './application/payments/use-cases/getAllPa
 import { MongoDBPaymentAdapter } from './infrastructure/payments/adapters/mongodb-payment.adapter';
 import { PaymentSchema } from './infrastructure/payments/adapters/payment.schema';
 
-// Notification Imports
+// Importaciones de Notification
 import { NotificationController } from './infrastructure/notifications/controllers/notification.controller';
 import { CreateNotificationUseCase } from './application/notifications/use-cases/create-notification.use-case';
 import { DeleteNotificationUseCase } from './application/notifications/use-cases/delete-notification.use-case';
@@ -32,7 +32,7 @@ import { GetAllNotificationsUseCase } from './application/notifications/use-case
 import { MongoDBNotificationAdapter } from './infrastructure/notifications/adapters/mongodb-notification.adapter';
 import { NotificationSchema } from './infrastructure/notifications/adapters/notification.schema';
 
-// Contact Imports
+// Importaciones de Contact
 import { ContactController } from './infrastructure/contacts/controllers/contact.controller';
 import { CreateContactUseCase } from './application/contacts/use-cases/create-contact.use-case';
 import { DeleteContactUseCase } from './application/contacts/use-cases/delete-contact.use-case';
@@ -42,13 +42,13 @@ import { GetAllContactsUseCase } from './application/contacts/use-cases/get-all-
 import { MongoDBContactAdapter } from './infrastructure/contacts/adapters/mongodb-contact.adapter';
 import { ContactSchema } from './infrastructure/contacts/adapters/contact.schema';
 
-// User Imports
+// Importaciones de User
 import { UserController } from './infrastructure/users/controllers/user.controller';
 import { CreateUserUseCase } from './application/users/use-cases/create-user.use-case';
 import { MongoDBUserAdapter } from './infrastructure/users/adapters/mongodb-user.adapter';
 import { UserSchema } from './infrastructure/users/adapters/user.schema';
 
-// Token Imports
+// Importaciones de Token
 import { TokenController } from './infrastructure/tokens/controllers/token.controller';
 import { GenerateTokenUseCase } from './application/tokens/use-cases/generate-token.use-case';
 import { ValidateTokenUseCase } from './application/tokens/use-cases/validate-token.use-case';
@@ -64,8 +64,8 @@ import { TokenSchema } from './infrastructure/tokens/adapters/token.schema';
       { name: 'Payment', schema: PaymentSchema },
       { name: 'Notification', schema: NotificationSchema },
       { name: 'Contact', schema: ContactSchema },
-      { name: 'User', schema: UserSchema }, // Añade el esquema de User
-      { name: 'Token', schema: TokenSchema }, // Añade el esquema de Token
+      { name: 'User', schema: UserSchema },
+      { name: 'Token', schema: TokenSchema },
     ]),
   ],
   controllers: [
@@ -73,11 +73,11 @@ import { TokenSchema } from './infrastructure/tokens/adapters/token.schema';
     PaymentController,
     NotificationController,
     ContactController,
-    UserController, // Añade el controlador de User
-    TokenController, // Añade el controlador de Token
+    UserController,
+    TokenController,
   ],
   providers: [
-    // Product Providers
+    // Providers de Product
     CreateProductUseCase,
     DeleteProductUseCase,
     GetProductByIdUseCase,
@@ -87,8 +87,7 @@ import { TokenSchema } from './infrastructure/tokens/adapters/token.schema';
       provide: 'ProductServicePort',
       useClass: MongoDBProductAdapter,
     },
-
-    // Payment Providers
+    // Providers de Payment
     CreatePaymentUseCase,
     DeletePaymentUseCase,
     GetPaymentByIdUseCase,
@@ -98,8 +97,7 @@ import { TokenSchema } from './infrastructure/tokens/adapters/token.schema';
       provide: 'PaymentServicePort',
       useClass: MongoDBPaymentAdapter,
     },
-
-    // Notification Providers
+    // Providers de Notification
     CreateNotificationUseCase,
     DeleteNotificationUseCase,
     GetNotificationByIdUseCase,
@@ -109,8 +107,7 @@ import { TokenSchema } from './infrastructure/tokens/adapters/token.schema';
       provide: 'NotificationServicePort',
       useClass: MongoDBNotificationAdapter,
     },
-
-    // Contact Providers
+    // Providers de Contact
     CreateContactUseCase,
     DeleteContactUseCase,
     GetContactByIdUseCase,
@@ -120,15 +117,13 @@ import { TokenSchema } from './infrastructure/tokens/adapters/token.schema';
       provide: 'ContactServicePort',
       useClass: MongoDBContactAdapter,
     },
-
-    // User Providers
+    // Providers de User
     CreateUserUseCase,
     {
       provide: 'UserServicePort',
       useClass: MongoDBUserAdapter,
     },
-
-    // Token Providers
+    // Providers de Token
     GenerateTokenUseCase,
     ValidateTokenUseCase,
     {

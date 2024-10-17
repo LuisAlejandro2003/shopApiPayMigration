@@ -18,11 +18,13 @@ export class MongoDBNotificationAdapter implements NotificationServicePort {
 
   async create(notification: Notification): Promise<Notification> {
     try {
+      console.log(notification)
       const response = await this.client.messages.create({
         body: notification.message,
         from: process.env.TWILIO_WHATSAPP_FROM,
         to: `whatsapp:${notification.phoneNumber}`,
       });
+
 
       const savedNotification = new this.notificationModel({
         ...notification,
@@ -30,6 +32,8 @@ export class MongoDBNotificationAdapter implements NotificationServicePort {
         sid: response.sid,
         dateSent: response.dateCreated,
       });
+
+      console.log(notification);
       await savedNotification.save();
 
       return new Notification(
