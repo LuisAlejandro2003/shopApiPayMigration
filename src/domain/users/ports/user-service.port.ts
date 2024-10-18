@@ -6,5 +6,6 @@ export interface UserServicePort {
   activateUser(contactId: string): Promise<void>;
   activateUserAccount(userId: string): Promise<void>;
   findUserById(userId: string): Promise<User>;
+  findUserByEmail(email: string): Promise<User | null>;   
   
 }
