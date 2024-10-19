@@ -8,6 +8,8 @@ import { NotificationModule } from './infrastructure/notifications/notification.
 import { ContactModule } from './infrastructure/contacts/contact.module';
 import { UserModule } from './infrastructure/users/user.module';
 import { TokenModule } from './infrastructure/tokens/token.module';
+import { AuthModule } from './infrastructure/auth/auth.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -18,6 +20,7 @@ import { TokenModule } from './infrastructure/tokens/token.module';
     ContactModule,
     UserModule,
     TokenModule,
+    AuthModule,  
   ],
 })
 export class AppModule {}

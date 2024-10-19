@@ -1,15 +1,14 @@
 // src/infrastructure/auth/auth.module.ts
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthController } from './controllers/auth.controller';
+import { LoginUseCase } from '../../application/auth/use-cases/login.use-case';
 import { MongoDBAuthAdapter } from './adapters/mongodb-auth.adapter';
-import { LoginUseCase } from 'src/application/auth/use-cases/login.use-case';
-import { UserModule } from '../users/user.module';  // Importa el UserModule
+import { UserModule } from '../users/user.module';  // Importa UserModule
 
 @Module({
   imports: [
-    MongooseModule.forFeature([]),
-    UserModule, // Importa el módulo de usuarios
+    forwardRef(() => UserModule),  // Evitar la dependencia circular
   ],
   controllers: [AuthController],
   providers: [
