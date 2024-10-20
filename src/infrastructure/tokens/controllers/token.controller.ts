@@ -6,7 +6,7 @@ import { ValidateTokenUseCase } from 'src/application/tokens/use-cases/validate-
 export class TokenController {
   constructor(private readonly validateTokenUseCase: ValidateTokenUseCase) {}
 
-  @Post(':userId/validate')
+  @Post(':userId')
   async validateToken(@Param('userId') userId: string, @Body('token') token: string) {
     return await this.validateTokenUseCase.execute( token);
   }

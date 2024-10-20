@@ -30,24 +30,26 @@ export class MongoDBNotificationAdapter implements NotificationServicePort {
 
   async create(notification: Notification): Promise<Notification> {
     try {
-      console.log(notification)
+      // Asegúrate de que el número de teléfono esté en formato E.164
+      const phoneNumber = notification.phoneNumber.startsWith('+')
+        ? notification.phoneNumber
+        : `+${notification.phoneNumber}`;
+  
       const response = await this.client.messages.create({
         body: notification.message,
         from: process.env.TWILIO_WHATSAPP_FROM,
-        to: `whatsapp:${notification.phoneNumber}`,
+        to: `whatsapp:${phoneNumber}`,  // Aquí aseguras que siempre tendrá el formato correcto
       });
-
-
+  
       const savedNotification = new this.notificationModel({
         ...notification,
         status: 'Sent',
         sid: response.sid,
         dateSent: response.dateCreated,
       });
-
-      console.log(notification);
+  
       await savedNotification.save();
-
+  
       return new Notification(
         savedNotification._id,
         savedNotification.phoneNumber,
@@ -67,7 +69,7 @@ export class MongoDBNotificationAdapter implements NotificationServicePort {
       throw new InternalServerErrorException(`WhatsApp notification failed: ${error.message}`);
     }
   }
-
+  
 
   async sendEmail(to: string, subject: string, text: string): Promise<void> {
     try {
