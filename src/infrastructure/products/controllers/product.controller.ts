@@ -1,9 +1,11 @@
+// src/infrastructure/products/controllers/product.controller.ts
 import { Controller, Get, Post, Patch, Delete, Param, Body } from '@nestjs/common';
 import { CreateProductUseCase } from 'src/application/products/use-cases/create-product.use-case';
 import { DeleteProductUseCase } from 'src/application/products/use-cases/delete-product.use-case';
 import { GetProductByIdUseCase } from 'src/application/products/use-cases/get-product-by-id.use-case';
 import { UpdateProductUseCase } from 'src/application/products/use-cases/update-product.use-case';
 import { GetAllProductsUseCase } from 'src/application/products/use-cases/get-all-products.use-case';
+import { CreateProductDto } from '../dtos/create-product.dto'; // Importamos el DTO
 
 @Controller('api/v1/products')
 export class ProductController {
@@ -16,7 +18,7 @@ export class ProductController {
   ) {}
 
   @Post()
-  async create(@Body() productData: any) {
+  async create(@Body() productData: CreateProductDto) {
     return this.createProductUseCase.execute(productData);
   }
 

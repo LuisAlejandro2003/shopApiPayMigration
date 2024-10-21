@@ -16,7 +16,7 @@ import { FindUserByEmailUseCase } from 'src/application/users/use-cases/find-use
   controllers: [UserController],
   providers: [
     CreateUserUseCase,
-    FindUserByEmailUseCase, // Asegúrate de que FindUserByEmailUseCase esté en providers
+    FindUserByEmailUseCase, 
     {
       provide: 'UserServicePort',
       useClass: MongoDBUserAdapter,

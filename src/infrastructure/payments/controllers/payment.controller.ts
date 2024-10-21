@@ -5,7 +5,7 @@ import { DeletePaymentUseCase } from 'src/application/payments/use-cases/delete-
 import { GetPaymentByIdUseCase } from 'src/application/payments/use-cases/get-payment-by-id.use-case';
 import { UpdatePaymentUseCase } from 'src/application/payments/use-cases/update-payment.use-case';
 import { GetAllPaymentsUseCase } from 'src/application/payments/use-cases/getAllPaymentsUseCase';
-import { Payment } from 'src/domain/payments/entities/payment.entity'; // Asegúrate de importar el tipo Payment
+import { CreatePaymentDto } from '../dtos/create-payment.dto'; 
 
 @Controller('api/v1/payments')
 export class PaymentController {
@@ -14,12 +14,12 @@ export class PaymentController {
     private readonly getPaymentByIdUseCase: GetPaymentByIdUseCase,
     private readonly updatePaymentUseCase: UpdatePaymentUseCase,
     private readonly deletePaymentUseCase: DeletePaymentUseCase,
-    private readonly getAllPaymentsUseCase: GetAllPaymentsUseCase, // Asegúrate de incluir este caso de uso
+    private readonly getAllPaymentsUseCase: GetAllPaymentsUseCase,
   ) {}
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async create(@Body() paymentData: Partial<Payment>) {
+  async create(@Body() paymentData: CreatePaymentDto) {  // Usar el DTO aquí
     const payment = await this.createPaymentUseCase.execute(paymentData);
     return {
       statusCode: HttpStatus.CREATED,
@@ -31,9 +31,7 @@ export class PaymentController {
   @Get()
   @HttpCode(HttpStatus.OK)
   async getAllPayments(@Query() queryParams: any) {
-
     return await this.getAllPaymentsUseCase.execute(queryParams);
-  
   }
 
   @Get(':id')
@@ -45,7 +43,6 @@ export class PaymentController {
   async update(@Param('id') id: string, @Body() paymentData: any) {
     return this.updatePaymentUseCase.execute(id, paymentData);
   }
-  
 
   @Delete(':id')
   async delete(@Param('id') id: string) {
