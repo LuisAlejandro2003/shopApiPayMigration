@@ -14,8 +14,28 @@ export class MongoDBUserAdapter {
 
 
   async activateUserAccount(userId: string): Promise<void> {
-    await this.userModel.findByIdAndUpdate(userId, { verifiedAt: new Date() });
+    const userDocument = await this.userModel.findById(userId).exec();
+    if (!userDocument) {
+      throw new Error('User not found');
+    }
+
+    // Map the document to the User entity
+    const user = new User(
+      userDocument.id,
+      userDocument.email,
+      userDocument.password,
+      userDocument.contactId,
+      userDocument.phoneNumber,
+      userDocument.verifiedAt
+    );
+
+    // Call the domain method
+    user.activateAccount();
+
+    // Save the updated data back to the database
+    await this.userModel.findByIdAndUpdate(userId, { verifiedAt: user.verifiedAt });
   }
+  
 
   async findUserById(userId: string): Promise<User> {
     return await this.userModel.findById(userId).exec();
