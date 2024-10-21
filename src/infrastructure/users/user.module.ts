@@ -6,6 +6,7 @@ import { UserController } from './controllers/user.controller';
 import { CreateUserUseCase } from '../../application/users/use-cases/create-user.use-case';
 import { MongoDBUserAdapter } from './adapters/mongodb-user.adapter';
 import { TokenModule } from '../tokens/token.module'; // Importa el TokenModule
+import { FindUserByEmailUseCase } from 'src/application/users/use-cases/find-user-by-email.use-case';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { TokenModule } from '../tokens/token.module'; // Importa el TokenModule
   controllers: [UserController],
   providers: [
     CreateUserUseCase,
+    FindUserByEmailUseCase, // Asegúrate de que FindUserByEmailUseCase esté en providers
     {
       provide: 'UserServicePort',
       useClass: MongoDBUserAdapter,

@@ -22,7 +22,6 @@ export class MongoDBUserAdapter {
 }
 
 async findUserByEmail(email: string): Promise<User | null> {
-  return await this.userModel.findOne({ email }).exec(); // Buscar el usuario por email
+  return await this.userModel.findOne({ email }).exec();
 }
-
 }
