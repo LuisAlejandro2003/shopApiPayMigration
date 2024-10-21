@@ -6,6 +6,8 @@ import { GetNotificationByIdUseCase } from 'src/application/notifications/use-ca
 import { UpdateNotificationUseCase } from 'src/application/notifications/use-cases/update-notification.use-case';
 import { DeleteNotificationUseCase } from 'src/application/notifications/use-cases/delete-notification.use-case';
 import { Notification } from 'src/domain/notifications/entities/notification.entity';
+import { CreateNotificationDto } from '../dtos/create-notification.dto';
+
 
 @Controller('api/v1/notifications')
 export class NotificationController {
@@ -17,14 +19,27 @@ export class NotificationController {
     private readonly deleteNotificationUseCase: DeleteNotificationUseCase,
   ) {}
 
+ 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  async create(@Body() notificationData: Notification) {
-    const notification = await this.createNotificationUseCase.execute(notificationData);
+  async create(@Body() notificationData: CreateNotificationDto) {
+    // Transformamos el DTO en una entidad Notification antes de ejecutar el caso de uso
+    const notification = new Notification(
+      '', // id lo dejamos vacío ya que se generará automáticamente
+      notificationData.phoneNumber,
+      notificationData.message,
+      notificationData.status || 'Pending',
+      notificationData.sid,
+      notificationData.dateSent,
+      notificationData.error,
+    );
+
+    const createdNotification = await this.createNotificationUseCase.execute(notification);
+    
     return {
       statusCode: HttpStatus.CREATED,
       message: 'Notification created successfully',
-      data: notification,
+      data: createdNotification,
     };
   }
 
