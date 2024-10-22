@@ -18,9 +18,9 @@ import { AuthModule } from './infrastructure/auth/auth.module';
     PaymentModule,
     NotificationModule,
     ContactModule,
-    UserModule,
     TokenModule,
     AuthModule,  
+    UserModule,
   ],
 })
 export class AppModule {}
