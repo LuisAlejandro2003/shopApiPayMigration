@@ -1,4 +1,3 @@
-// src/application/payments/use-cases/update-payment.use-case.ts
 import { Injectable, Inject, NotFoundException } from '@nestjs/common';
 import { PaymentServicePort } from 'src/domain/payments/ports/payment-service.port';
 import { Payment } from 'src/domain/payments/entities/payment.entity';
@@ -24,6 +23,7 @@ export class UpdatePaymentUseCase {
       paymentData.externalReference || existingPayment.externalReference,
       paymentData.successUrl || existingPayment.successUrl,
       paymentData.failureUrl || existingPayment.failureUrl,
+      paymentData.productId || existingPayment.productId // Asegúrate de incluir el productId aquí
     );
 
     return this.paymentService.update(id, updatedPayment);

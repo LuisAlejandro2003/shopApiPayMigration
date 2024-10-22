@@ -1,4 +1,3 @@
-// src/application/payments/use-cases/create-payment.use-case.ts
 import { Injectable, Inject } from '@nestjs/common';
 import { PaymentServicePort } from 'src/domain/payments/ports/payment-service.port';
 import { Payment } from 'src/domain/payments/entities/payment.entity';
@@ -19,6 +18,7 @@ export class CreatePaymentUseCase {
       paymentData.externalReference!,
       paymentData.successUrl!,
       paymentData.failureUrl!,
+      paymentData.productId! // Asegúrate de incluir el productId aquí
     );
 
     return this.paymentService.create(payment); // Retorno directamente el objeto esperado

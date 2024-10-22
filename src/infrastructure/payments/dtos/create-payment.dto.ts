@@ -1,10 +1,6 @@
-// src/infrastructure/payments/dtos/create-payment.dto.ts
-import { IsString, IsNumber, IsOptional, IsUrl } from 'class-validator';
+import { IsNumber, IsString } from 'class-validator';
 
 export class CreatePaymentDto {
-  @IsString()
-  readonly title: string;
-
   @IsNumber()
   readonly quantity: number;
 
@@ -25,4 +21,7 @@ export class CreatePaymentDto {
 
   @IsString()
   readonly pendingUrl: string;
+
+  @IsString()
+  readonly productId: string; // Asegúrate de que productId está aquí
 }

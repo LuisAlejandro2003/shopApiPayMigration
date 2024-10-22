@@ -48,6 +48,7 @@ export class MongoDBPaymentAdapter implements PaymentServicePort {
         externalReference: order.result.id,
         successUrl: payment.successUrl,
         failureUrl: payment.failureUrl,
+        productId: payment.productId, 
       });
       await savedPayment.save();
 
@@ -59,7 +60,8 @@ export class MongoDBPaymentAdapter implements PaymentServicePort {
           savedPayment.status,
           savedPayment.externalReference,
           savedPayment.successUrl,
-          savedPayment.failureUrl
+          savedPayment.failureUrl,
+          savedPayment.productId // También lo agregamos aquí
         ),
         links, // Retornar todos los enlaces necesarios
       };
@@ -67,48 +69,6 @@ export class MongoDBPaymentAdapter implements PaymentServicePort {
       throw new InternalServerErrorException(`Error creating payment: ${error.message}`);
     }
   }
-  async findById(id: string): Promise<Payment | null> {
-    const payment = await this.paymentModel.findById(id).exec();
-    if (!payment) throw new NotFoundException('Payment not found');
-    return new Payment(
-      payment._id.toString(),
-      payment.title,
-      payment.price,
-      payment.status,
-      payment.externalReference,
-      payment.successUrl,
-      payment.failureUrl,
-    );
-  }
-
-  async update(id: string, payment: Payment): Promise<Payment> {
-    const updatedPayment = await this.paymentModel.findByIdAndUpdate(
-      id,
-      {
-        title: payment.title,
-        price: payment.price,
-        status: payment.status,
-        externalReference: payment.externalReference,
-        successUrl: payment.successUrl,
-        failureUrl: payment.failureUrl,
-      },
-      { new: true },
-    ).exec();
-  
-    if (!updatedPayment) throw new NotFoundException('Payment not found');
-  
-    return new Payment(
-      updatedPayment._id.toString(),
-      updatedPayment.title,
-      updatedPayment.price,
-      updatedPayment.status,
-      updatedPayment.externalReference,
-      updatedPayment.successUrl,
-      updatedPayment.failureUrl
-    );
-  }
-  
-  
 
   async delete(id: string): Promise<void> {
     const result = await this.paymentModel.findByIdAndDelete(id).exec();
@@ -122,12 +82,57 @@ export class MongoDBPaymentAdapter implements PaymentServicePort {
     return capture.result;
   }
 
+
+  async findById(id: string): Promise<Payment | null> {
+    const payment = await this.paymentModel.findById(id).exec();
+    if (!payment) throw new NotFoundException('Payment not found');
+    return new Payment(
+      payment._id.toString(),
+      payment.title,
+      payment.price,
+      payment.status,
+      payment.externalReference,
+      payment.successUrl,
+      payment.failureUrl,
+      payment.productId // También lo agregamos aquí
+    );
+  }
+
+  async update(id: string, payment: Payment): Promise<Payment> {
+    const updatedPayment = await this.paymentModel.findByIdAndUpdate(
+      id,
+      {
+        title: payment.title,
+        price: payment.price,
+        status: payment.status,
+        externalReference: payment.externalReference,
+        successUrl: payment.successUrl,
+        failureUrl: payment.failureUrl,
+        productId: payment.productId, // Agregamos el productId aquí también
+      },
+      { new: true },
+    ).exec();
+
+    if (!updatedPayment) throw new NotFoundException('Payment not found');
+
+    return new Payment(
+      updatedPayment._id.toString(),
+      updatedPayment.title,
+      updatedPayment.price,
+      updatedPayment.status,
+      updatedPayment.externalReference,
+      updatedPayment.successUrl,
+      updatedPayment.failureUrl,
+      updatedPayment.productId // Lo agregamos aquí
+    );
+  }
+
   async findAll(queryParams: any): Promise<any> {
     const { page = 1, limit = 10, ...filters } = queryParams;
     const skip = (page - 1) * limit;
     const payments = await this.paymentModel.find(filters).skip(skip).limit(limit).exec();
     const totalItems = await this.paymentModel.countDocuments(filters).exec();
-    
+
     return {
       data: payments.map(payment => new Payment(
         payment._id.toString(),
@@ -136,7 +141,8 @@ export class MongoDBPaymentAdapter implements PaymentServicePort {
         payment.status,
         payment.externalReference,
         payment.successUrl,
-        payment.failureUrl
+        payment.failureUrl,
+        payment.productId 
       )),
       meta: {
         totalItems,

@@ -6,7 +6,8 @@ export interface PaymentDocument extends Document {
   status: string;
   externalReference: string;
   successUrl: string;      // <-- Añadir esta propiedad
-  failureUrl: string;      // <-- Añadir esta propiedad
+  failureUrl: string;  
+  productId: string;     
 }
 
 export const PaymentSchema = new Schema<PaymentDocument>({
@@ -15,5 +16,6 @@ export const PaymentSchema = new Schema<PaymentDocument>({
   status: { type: String, required: true },
   externalReference: { type: String, required: true },
   successUrl: { type: String, required: true },  // <-- Añadir definición de campo
-  failureUrl: { type: String, required: true }   // <-- Añadir definición de campo
+  failureUrl: { type: String, required: true },   // <-- Añadir definición de campo
+  productId: { type: String, required: true },
 });
