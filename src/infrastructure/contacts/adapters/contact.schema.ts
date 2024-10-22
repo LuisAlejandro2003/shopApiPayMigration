@@ -3,6 +3,9 @@ import { Document } from 'mongoose';
 
 @Schema()
 export class Contact extends Document {
+  @Prop({ required: true, type: String }) 
+  _id: string;
+
   @Prop({ required: true })
   firstName: string;
 

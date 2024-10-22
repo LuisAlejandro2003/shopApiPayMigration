@@ -1,11 +1,12 @@
-// src/domain/contacts/entities/contact.entity.ts
+import { UUID } from '../value-objects/uuid.value-object';
+
 export class Contact {
   constructor(
-    public id: string,
-    public email: string,
-    public firstName: string,
-    public lastName: string,
-    public phoneNumber: string,
-    public userId?: string | null,
+    public readonly id: UUID,
+    public readonly email: string,
+    public readonly firstName: string,
+    public readonly lastName: string,
+    public readonly phoneNumber: string,
+    public readonly userId?: UUID | null,
   ) {}
 }

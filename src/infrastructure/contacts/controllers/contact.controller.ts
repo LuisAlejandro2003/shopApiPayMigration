@@ -6,6 +6,7 @@ import { UpdateContactUseCase } from 'src/application/contacts/use-cases/update-
 import { DeleteContactUseCase } from 'src/application/contacts/use-cases/delete-contact.use-case';
 import { CreateContactDto } from '../dtos/create-contact.dto';
 import { Contact } from 'src/domain/contacts/entities/contact.entity';
+import { UUID } from 'src/domain/contacts/value-objects/uuid.value-object';
 
 @Controller('api/v1/contacts')
 export class ContactController {
@@ -21,12 +22,12 @@ export class ContactController {
   @Post()
   async create(@Body() contactData: CreateContactDto) {
     const contact = new Contact(
-      '', // ID generado automáticamente
+      new UUID(), // Generar un nuevo UUID automáticamente
       contactData.email,
       contactData.firstName,
       contactData.lastName,
       contactData.phoneNumber,
-      null, // userId nulo por defecto
+      null, // No tiene userId por defecto
     );
     return await this.createContactUseCase.execute(contact);
   }
@@ -40,18 +41,21 @@ export class ContactController {
   // Endpoint para obtener contacto por ID
   @Get(':id')
   async getById(@Param('id') id: string) {
-    return await this.getContactByIdUseCase.execute(id);
+    const contactId = new UUID(id); // Convertimos el string a UUID
+    return await this.getContactByIdUseCase.execute(contactId.toString()); // Convertimos de vuelta a string para el adaptador
   }
 
   // Endpoint para actualizar un contacto
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateData: Partial<CreateContactDto>) {
-    return await this.updateContactUseCase.execute(id, updateData);
+    const contactId = new UUID(id); // Convertimos el string a UUID
+    return await this.updateContactUseCase.execute(contactId.toString(), updateData); // Convertimos de vuelta a string
   }
 
   // Endpoint para eliminar un contacto
   @Delete(':id')
   async delete(@Param('id') id: string) {
-    return await this.deleteContactUseCase.execute(id);
+    const contactId = new UUID(id); // Convertimos el string a UUID
+    return await this.deleteContactUseCase.execute(contactId.toString()); // Convertimos de vuelta a string
   }
 }
